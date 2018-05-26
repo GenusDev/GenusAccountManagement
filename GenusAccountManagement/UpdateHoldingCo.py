@@ -2,25 +2,26 @@ import gspread
 import datetime
 import oauth2client
 from locale import *
+from generalFunctions import makeRelativePath
 
 class updateAccounts:
-    
-    def __init__(self, accountData):    
+
+    def __init__(self, accountData):
         setlocale(LC_NUMERIC, '')
-        
+
         self.accountdata = accountData
-    
+
         from oauth2client.service_account import ServiceAccountCredentials
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/matthewsteele 1/Google Drive/Projects - /HoldingCompany/StockAnalysis/AccountManagementScript/GoogleSheetsClientCreds.json', scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_name(makeRelativePath('GoogleSheetsClientCreds.json'), scope)
         client = gspread.authorize(creds)
 
         # Open a worksheet from spreadsheet with one shot
         self.HoldingCoAccountSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('AccountsBalance')
         self.PositionSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('Analysis')
         self.PersonalAccountSheet = client.open_by_key('10o-H7l5u0BvazIs4g3Fy4NpJcb8d4X6n7vFBVs0pKCc').worksheet('Statements')
-        
+
         self.HoldingCoAccounts = [
             {
                 "Account": "Robinhood",
@@ -36,7 +37,7 @@ class updateAccounts:
                 "Account": "TD Matt's IRA",
                 "Invested": atof(accountData['TDMattIRA']["invested"].strip("$")) + atof(accountData['TDClub']["bonds"].strip("$")),
                 "Cash": float(atof(accountData['TDMattIRA']["cash"].strip("$"))) #MIRA
-            },   
+            },
             {
                 "Account": "CoinBase",
                 "Invested": accountData['Robinhood']["invested"],
@@ -48,7 +49,7 @@ class updateAccounts:
                 "Cash": 5500
             },
         ]
-        
+
         self.PersonalAccounts = [
             {
                 "Account": "BECU",
@@ -67,11 +68,11 @@ class updateAccounts:
             {
                 "Account": "Paypal",
                 "Debit": accountData['PayPal']["cash"]
-            },                                                                     
+            },
             {
                 "Account": "Citi",
                 "Credit": accountData['Citi']["credit"]
-            },                                         
+            },
             {
                 "Account": "Jacob",
                 "Debit": accountData['Jacob']["cash"],
@@ -79,7 +80,7 @@ class updateAccounts:
             {
                 "Account": "Rick",
                 "Credit": accountData['Rick']["credit"],
-            },                                     
+            },
             {
                 "Account": "House",
                 "Debit": accountData['House']["cash"]
@@ -91,7 +92,7 @@ class updateAccounts:
             {
                 "Account": "NewGradPlusLoan",
                 "Credit": accountData['NewGradPlusLoan']["credit"]
-            },                               
+            },
 
         ]
 
@@ -115,7 +116,7 @@ class updateAccounts:
         PersonalCell = self.PositionSheet.find(person)
         PersonalBalance = self.PositionSheet.range(PersonalCell.row,4)
         return PersonalBalance[0].value
-    
+
     def updateHCAccountData(self):
         HoldingData = {
             'positions':{
@@ -125,19 +126,19 @@ class updateAccounts:
                 "Lau" : self.grabBalancesOfAccounts("Lau")
             }
         }
-        
+
         return HoldingData
 
     def updateHoldingPositions(self):
-        HoldingData = self.updateHCAccountData()  
+        HoldingData = self.updateHCAccountData()
         self.accountdata['HoldingData'] = HoldingData
-        
+
         self.PersonalAccounts.append({
             "Account": "HoldingData",
             "Debit": float(self.accountdata['HoldingData']['positions']['Matt']) + float(self.accountdata['HoldingData']['positions']['BnB'])
         })
         print(self.PersonalAccounts)
-    
+
     def fillLastRowofPersonalAccounts(self, row):
         next_row = int(self.next_available_row(self.PersonalAccountSheet)) - 1
         cell_list = self.PersonalAccountSheet.range(next_row,1,next_row,5)
@@ -154,7 +155,7 @@ class updateAccounts:
         except:
             pass
 
-        self.PersonalAccountSheet.update_cells(cell_list, value_input_option='USER_ENTERED')      
+        self.PersonalAccountSheet.update_cells(cell_list, value_input_option='USER_ENTERED')
 
     def execute(self):
         self.updateHoldingPositions()
@@ -164,4 +165,3 @@ class updateAccounts:
         for eachRow in  self.PersonalAccounts:
             print (eachRow)
             self.fillLastRowofPersonalAccounts(eachRow)
-            

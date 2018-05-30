@@ -53,9 +53,10 @@ def runLookup(AI, command="none"):
                 except:
                     print(accountFactor," info not added")
             elif accountFactor == "allInfo":
-                print(lowerKeysAI[inputedText])
+                pprint(lowerKeysAI[inputedText])
         else:
             for each in lowerKeysAI.keys():
+                print("Let me try to guess")
                 if inputedText in each:
                     correctAccountQuestion = input(each+" ? y/n")
                     if correctAccountQuestion == "y":
@@ -65,7 +66,7 @@ def runLookup(AI, command="none"):
                             copy(lowerKeysAI[correctAccount][accountFactor])
                             return lowerKeysAI[correctAccount][accountFactor]
                         elif accountFactor == "allInfo":
-                            return lowerKeysAI[correctAccount]
+                            pprint (lowerKeysAI[correctAccount])
                             break
                     elif correctAccountQuestion == "n":
                         pass
@@ -112,17 +113,19 @@ def runLookup(AI, command="none"):
         else:
             AccountName = input("account name?: ")
 
-        keyInputed = input("key? ('Usr','Pass','Handle','Id'): ")
-        valueInputed = input("value?: ")
+        keyInputed = input("key? ('Usr','Pass','Handle','Id'):, add in new dict with {} ")
+        if "{" in keyInputed:
+            AI[AccountName] = ast.literal_eval(keyInputed)
+        else:
+            valueInputed = input("value?: ")
+            try:
+                currentData = AI[AccountName] #ast.literal_eval()
+                pprint(currentData)
+                AI[AccountName].update({keyInputed:valueInputed})
+            except:
+                AI[AccountName] = {keyInputed:valueInputed}
 
-        try:
-            currentData = AI[AccountName] #ast.literal_eval()
-            print(currentData)
-            AI[AccountName].update({keyInputed:valueInputed})
-        except:
-            AI[AccountName] = {keyInputed:valueInputed}
-
-        print(AI[AccountName])
+        pprint(AI[AccountName])
 
         encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
         runLookup(AI)
@@ -161,15 +164,15 @@ def runLookup(AI, command="none"):
 
     if "updateacc" in inputedText:
         accountData = GetAccountData.compileAllData(AI)
-        updateClass = UpdateHoldingCo.updateAccounts(accountData)
-        updateClass.execute()
+        # updateClass = UpdateHoldingCo.updateAccounts(accountData)
+        # updateClass.execute()
 
     #loadOldAccountData
     if "loadaccountdata" in inputedText: #potentiall ancrypt old data
         OldAccountDataRequest()
 
 
-    if "+" in inputedText:
+    if "+" in inputedText: #reformat this as a recursive function for allowing short lookups
         x,y = inputedText.split("+")
         if "i" in y:
             shortLookUp(x,"allInfo")
@@ -193,9 +196,8 @@ def runLookup(AI, command="none"):
         copy(lowerKeysAI[inputedText]["Pass"])
 
 
-    else:
-        print("Heading back to main interface")
-        runLookup(AI)
+    elif inputedText not in lowerKeysAI:
+        shortLookUp(inputedText,"allInfo")
 
 def Main():
     global unlockKey

@@ -12,7 +12,7 @@ These scripts use Python3 - so first make sure you have a current version of Pyt
 ```console
 pip install -r requirements.txt
 ```
-(look into setup files conventions and usage)
+You may need to install the Robinhood library directly from this link: [github](https://github.com/Jamonek/Robinhood)
 
 ## Copy the following into your bash profile:
 From terminal in project folder run:
@@ -49,4 +49,10 @@ open .
 
 Then place the downloaded Chrome Webdriver into the bin folder.
 
-## set folder for statement download
+## Usage
+
+You can look up p*ssw*rds by calling the command with with keycode and the account of interest.
+```console
+GAI code accountName
+```
+doing so will copy the password directly

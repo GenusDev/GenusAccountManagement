@@ -19,7 +19,7 @@ def encryptFile(key, inFileName):
     localKey = getKey(key)
     cipher = AES.new(localKey)
 
-    outputFile = "(encrypted)" + inFileName
+    outputFile = inFileName.replace("decrypted", "encrypted")
 
     outputFileFullPath = makeRelativePath(outputFile)
     inFileFullPath = makeRelativePath(inFileName)
@@ -40,23 +40,20 @@ def encryptFile(key, inFileName):
                 print(chunk)
                 outFile.write(cipher.encrypt(chunk))
 
-def encryptJson(key, Json, OutFileName): # needs fixing
+def encryptJson(key, AccountDataDict, OutFileName): # needs fixing
     localKey = getKey(key)
     cipher = AES.new(localKey)
-    #print(Json)
-    # outputFile = "(encrypted2)" + inFileName
-    # # if "(encrypted)" in inFileName:
-    # #     outputFile = fileName
+    jsonString = json.dumps(AccountDataDict)
+
     outputFileName = makeRelativePath(OutFileName)
-    jsonBites = str(Json).encode()
+    jsonBites = str(jsonString).encode()
+
     with open(outputFileName, "wb") as outFile:
-        # outFile.write(fileSize.encode('utf-8'))
         print(outputFileName)
         if len(jsonBites) % 16 != 0:
             jsonBites += b' ' * (16-(len(jsonBites)%16)) #padding
         outFile.write(cipher.encrypt(jsonBites))
 
-#encryptJson("go5Ity",AI,"AccountData.json")
 
 def encryptText(plaintext):
     global cipher #pulls in global variable
@@ -76,12 +73,9 @@ def decryptFileasJson(key, fileName):
 
     with open(InFilePath, 'rb') as inFile:
         chunk = inFile.read(chunkSize)    #won't work for data larger than chunksize - check with
-        outData = cipher.decrypt(chunk).decode()
-
-        try:
-            json_data = ast.literal_eval(outData)
-        except:
-            json_data = json.loads(outData)
+        outData = cipher.decrypt(chunk)
+        #json_data = ast.literal_eval(outData)
+        json_data = json.loads(outData)
         return json_data
 
 def decryptFile(key, fileName):

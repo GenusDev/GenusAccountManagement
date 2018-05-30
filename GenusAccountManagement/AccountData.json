@@ -9,7 +9,7 @@
         "ChallengeHomeKeyWord": "home",
         "ChallengeTextByClass": "securityP",
         "ChallengeAnwsByName": "challengeAnswer",
-        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },       
+        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },
         "dataGrabURL": "https://invest.ameritrade.com/grid/p/site#r=positions",
         "XPathManyBalances": "//span[@class='marketValueDollars']",
         "BalanceElementNum": {
@@ -18,7 +18,7 @@
             "cash" : 5
         },
         "XPathManyPositions": "//tr[@data-trade-action]"
-        
+
     },
     "TDMattIRA": {
         "LogInURL": "https://invest.ameritrade.com/grid/p/login",
@@ -30,20 +30,19 @@
         "ChallengeHomeKeyWord": "home",
         "ChallengeTextByClass": "securityP",
         "ChallengeAnwsByName": "challengeAnswer",
-        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },       
+        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },
         "dataGrabURL": "https://invest.ameritrade.com/grid/p/site#r=positions",
         "XPathManyBalances": "//span[@class='marketValueDollars']",
         "BalanceElementNum": {
             "invested": 1,
             "cash": 3,
-            "cash" : 5
         },
-        "XPathManyPositions": "//tr[@data-trade-action]"      
+        "XPathManyPositions": "//tr[@data-trade-action]"
     },
     "TDJohnIRA": {
        "owner" : "HoldingCo",
        "cash": 5500
-    },     
+    },
     "BECU": {
         "LogInURL": "https://onlinebanking.becu.org/BECUBankingWeb/login",
         "Usr" : "mattmoo",
@@ -54,7 +53,7 @@
         "ChallengeHomeKeyWord": "Summary",
         "ChallengeTextByClass": "securityP",
         "ChallengeAnwsByName": "challengeAnswer",
-        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },       
+        "challengInput" : {"nickname": "mattmoo","sibling": "Tacoma", "retire": "brazil", "street": "Reynolds", "niece": "Aubrey", "middle":"Andrew" },
         "dataGrabURL": "https://onlinebanking.becu.org/BECUBankingWeb/Accounts/Summary.aspx",
         "XPathManyBalances": "//td[@align='right']",
         "BalanceElementNum": {
@@ -62,7 +61,7 @@
             "savings": 8,
             "credit" : 15
         }
-        
+
     },
     "BFSFCU": {
         "LogInURL": "https://ob.bfsfcu.org/BFSFCU/FinancialOverview/FinancialOverview.aspx",
@@ -85,7 +84,7 @@
     "Robinhood": {
         "Usr" : "matsteele",
         "Owner" : "Matt",
-        "Pass": "2Manhattans#"       
+        "Pass": "2Manhattans#"
     },
     "Citi": {
         "LogInURL": "https://online.citi.com/US/login.do?",
@@ -135,5 +134,5 @@
         "credit":  21367,
         "Owner" : "Matt"
     }
-    
+
 }

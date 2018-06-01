@@ -56,9 +56,9 @@ def runLookup(AI, command="none"):
                 pprint(lowerKeysAI[inputedText])
         else:
             for each in lowerKeysAI.keys():
-                print("Let me try to guess")
                 if inputedText in each:
-                    correctAccountQuestion = input(each+" ? y/n")
+                    print("Let me try to guess")
+                    correctAccountQuestion = input(each+" ? y/n : ")
                     if correctAccountQuestion == "y":
                         correctAccount = each
                         if accountFactor != "allInfo":
@@ -193,6 +193,7 @@ def runLookup(AI, command="none"):
             #     driver.get(url)
 
     elif inputedText in lowerKeysAI:
+        print("going straight to copy")
         copy(lowerKeysAI[inputedText]["Pass"])
 
 

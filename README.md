@@ -27,8 +27,7 @@ echo 'alias GAI="python3 '"'"''"$locOfScript"''"'"'"'  >>~/.bash_profile
 ```
 Script to edit bash profile to assign the python scripts
 
-Replace the curly braces by pasting in the copied the PWD.
-
+The alias through terminal won't be available until after you have restarted terminal.
 
 ## putting a chrome selenium webdriver in your bin folder
 
@@ -43,7 +42,7 @@ Most users will find their bin folder in the following location.
 cd into it and open in finder.
 
 ```console
-cd ***
+cd /usr/local/bin
 open .
 ```
 

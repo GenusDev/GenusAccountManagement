@@ -3,9 +3,10 @@ import datetime
 import oauth2client
 from locale import *
 from generalFunctions import makeRelativePath
+from HoldingCoPositions import HoldingCoAccounts
+from MSteelePersonalAccounts import PersonalAccounts #best to input it as a variable arguments eventually
 
 class updateAccounts:
-
     def __init__(self, accountData):
         setlocale(LC_NUMERIC, '')
 
@@ -20,81 +21,13 @@ class updateAccounts:
         # Open a worksheet from spreadsheet with one shot
         self.HoldingCoAccountSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('AccountsBalance')
         self.PositionSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('Analysis')
+        self.ShareTrackingSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('ShareTracking')
         self.PersonalAccountSheet = client.open_by_key('10o-H7l5u0BvazIs4g3Fy4NpJcb8d4X6n7vFBVs0pKCc').worksheet('Statements')
 
-        self.HoldingCoAccounts = [
-            {
-                "Account": "Robinhood",
-                "Invested": accountData['Robinhood']["invested"],
-                "Cash": accountData['Robinhood']["cash"]
-            },
-            {
-                "Account": "TD Club",
-                "Invested": atof(accountData['TDClub']["invested"].strip("$")) + atof(accountData['TDClub']["bonds"].strip("$")),
-                "Cash": float(atof(accountData['TDClub']["cash"].strip("$")))
-            },
-            {
-                "Account": "TD Matt's IRA",
-                "Invested": atof(accountData['TDMattIRA']["invested"].strip("$")) + atof(accountData['TDClub']["bonds"].strip("$")),
-                "Cash": float(atof(accountData['TDMattIRA']["cash"].strip("$"))) #MIRA
-            },
-            {
-                "Account": "CoinBase",
-                "Invested": accountData['Robinhood']["invested"],
-                "Cash": accountData['Robinhood']["cash"]
-            },
-            {
-                "Account": "TD John's IRA",
-                "Invested": 0,
-                "Cash": 5500
-            },
-        ]
+        #pullinAccountData
+        self.PersonalAccounts = PersonalAccounts
+        self.HoldingCoAccountSheet = HoldingCoAccounts
 
-        self.PersonalAccounts = [
-            {
-                "Account": "BECU",
-                "Debit": atof(accountData['BECU']["cash"].strip("$")) + atof(accountData['BECU']["savings"].strip("$"))
-
-            },
-            {
-                "Account": "BFSFCU",
-                "Credit": accountData['BFSFCU']["credit"],
-                "Debit": accountData['BFSFCU']["cash"],
-            },
-            {
-                "Account": "Venmo",
-                "Debit": accountData['Venmo']["cash"]
-            },
-            {
-                "Account": "Paypal",
-                "Debit": accountData['PayPal']["cash"]
-            },
-            {
-                "Account": "Citi",
-                "Credit": accountData['Citi']["credit"]
-            },
-            {
-                "Account": "Jacob",
-                "Debit": accountData['Jacob']["cash"],
-            },
-            {
-                "Account": "Rick",
-                "Credit": accountData['Rick']["credit"],
-            },
-            {
-                "Account": "House",
-                "Debit": accountData['House']["cash"]
-            },
-            {
-                "Account": "Consolidatedloan",
-                "Credit": accountData['Consolidatedloan']["credit"]
-            },
-            {
-                "Account": "NewGradPlusLoan",
-                "Credit": accountData['NewGradPlusLoan']["credit"]
-            },
-
-        ]
 
     def next_available_row(self,sheet):
         str_list = filter(None, sheet.col_values(1))  # fastest
@@ -111,6 +44,19 @@ class updateAccounts:
         cell_list[4].value = "={}+{}".format(row['Cash'], row['Invested'])
 
         self.HoldingCoAccountSheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+
+    def setValuationCell(self, row):
+            next_row = self.next_available_row(self.HoldingCoAccountSheet)
+            cell_list = self.HoldingCoAccountSheet.range(next_row,1,next_row,5)
+
+            cell_list[0].value = datetime.date.today().strftime('%m/%d/%Y')
+            cell_list[1].value = row['Account']
+            cell_list[2].value = row['Invested']
+            cell_list[3].value = row['Cash']
+            cell_list[4].value = "={}+{}".format(row['Cash'], row['Invested'])
+
+            self.HoldingCoAccountSheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+
 
     def grabBalancesOfAccounts(self,person):
         PersonalCell = self.PositionSheet.find(person)
@@ -165,3 +111,8 @@ class updateAccounts:
         for eachRow in  self.PersonalAccounts:
             print (eachRow)
             self.fillLastRowofPersonalAccounts(eachRow)
+
+
+# Create an interface for managing accounts that is flexible to adapt to anyone's accounts - yet still pull from holding co
+# Create function for getting and setting account info
+#

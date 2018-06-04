@@ -9,87 +9,14 @@ import GetAccountData
 import pickle
 import glob
 from pprint import pprint
-from generalFunctions import makeRelativePath,loadOldAccountData
- # potentially have inputted at a later stage
-
-
-def copy(data):
-    print(data + " copied")
-    os.system("echo '%s' | pbcopy" % data)
+from generalFunctions import makeRelativePath, copy
+from commandOptions import commands
 
 def runLookup(AI, command="none"):
     lowerKeysAI =  {k.lower(): v for k, v in AI.items()}
-    # print(command)
-    #if additional factors were passed in the first line
     inputedText = command.lower()
     if command == "none":
         inputedText = input("Account? -c to list commands : ").lower().replace(" ","")
-
-    commands = {#figure out how to print out commands pretty
-        "-a" : "list all accounts",
-        "-c" : "list all commands",
-        "-e" : "escape",
-        "-updateAcc": "will update all accounts - be sure to put in account info as needed",
-        "add" : "add a new account and/or data point",
-        "del" : "remove a new account and/or data point",
-        "loadAccountData": "Loads old account data based on date",
-        "+": "commands are chained with +",
-        "nameOfAccount +command" : ["account specific commands",
-                                    {
-                                        "+i": "list all account specific info",
-                                        "+Key": "look for specific data by key",
-                                        "+u": "list us*rn*me",
-                                        "+p": "list p*ssw*rd (password is default output if no command provided)",
-                                    }]
-
-    }
-
-    def shortLookUp(inputedText,accountFactor):
-        if inputedText in lowerKeysAI:
-            if accountFactor != "allInfo":
-                try:
-                    copy(lowerKeysAI[inputedText][accountFactor])
-                    return lowerKeysAI[inputedText][accountFactor]
-                except:
-                    print(accountFactor," info not added")
-            elif accountFactor == "allInfo":
-                pprint(lowerKeysAI[inputedText])
-        else:
-            for each in lowerKeysAI.keys():
-                if inputedText in each:
-                    print("Let me try to guess")
-                    correctAccountQuestion = input(each+" ? y/n : ")
-                    if correctAccountQuestion == "y":
-                        correctAccount = each
-                        if accountFactor != "allInfo":
-                            print(lowerKeysAI[correctAccount]['Pass'])
-                            copy(lowerKeysAI[correctAccount][accountFactor])
-                            return lowerKeysAI[correctAccount][accountFactor]
-                        elif accountFactor == "allInfo":
-                            pprint (lowerKeysAI[correctAccount])
-                            break
-                    elif correctAccountQuestion == "n":
-                        pass
-    #accountloading functions:
-    def OldAccountDataRequest():
-        dateInput = input("select dates (20180521) or (D)isplay dates : ")
-        if dateInput == "D":
-            for each in glob.glob(makeRelativePath("AccountDataPickles/*.pickle")):
-                print(os.path.basename(each[:-18]))
-            OldAccountDataRequest()
-        else:
-            try:
-                oldAccountData = loadOldAccountData(dateInput)
-                pprint(oldAccountData)
-            except:
-                print("Error of some kind, returning to main menu")
-                runLookup(AI)
-
-    def loadOldAccountData(date):
-        fileRead = open(makeRelativePath('AccountDataPickles/{}accountData.pickle'.format(date)), 'rb')
-        accountData = pickle.load(fileRead)
-        return accountData
-
 
     if "-a" in inputedText:
         for each in AI:
@@ -105,21 +32,21 @@ def runLookup(AI, command="none"):
         quit()
 
     if "add" in inputedText:
-        print(inputedText)
+
         if " " in inputedText:
             x,y = inputedText.split(" ")
             AccountName = y
-            print("worked!")
         else:
             AccountName = input("account name?: ")
 
         keyInputed = input("key? ('Usr','Pass','Handle','Id'):, add in new dict with {} ")
+
         if "{" in keyInputed:
             AI[AccountName] = ast.literal_eval(keyInputed)
         else:
             valueInputed = input("value?: ")
             try:
-                currentData = AI[AccountName] #ast.literal_eval()
+                currentData = AI[AccountName]
                 pprint(currentData)
                 AI[AccountName].update({keyInputed:valueInputed})
             except:
@@ -157,15 +84,16 @@ def runLookup(AI, command="none"):
         else:
             print("not an option")
 
-        #print(AI)
         encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
         runLookup(AI)
 
 
     if "updateacc" in inputedText:
         accountData = GetAccountData.compileAllData(AI)
-        # updateClass = UpdateHoldingCo.updateAccounts(accountData)
-        # updateClass.execute()
+        #accountData = loadOldAccountData("20180603")
+        pprint(accountData)
+        updateClass = UpdateHoldingCo.updateAccounts(accountData)
+        updateClass.execute()
 
     #loadOldAccountData
     if "loadaccountdata" in inputedText: #potentiall ancrypt old data
@@ -175,14 +103,14 @@ def runLookup(AI, command="none"):
     if "+" in inputedText: #reformat this as a recursive function for allowing short lookups
         x,y = inputedText.split("+")
         if "i" in y:
-            shortLookUp(x,"allInfo")
+            shortLookUp(x,"allInfo",lowerKeysAI)
         elif "u" in y:
-            shortLookUp(x,"Usr")
+            shortLookUp(x,"Usr",lowerKeysAI)
         elif "p" in y:
-            shortLookUp(x,"Pass")
+            shortLookUp(x,"Pass",lowerKeysAI)
         else:
             try:
-                url = shortLookUp(x,y)
+                url = shortLookUp(x,y,lowerKeysAI)
             except:
                 print("key not found")
             # print(url)
@@ -198,7 +126,55 @@ def runLookup(AI, command="none"):
 
 
     elif inputedText not in lowerKeysAI:
-        shortLookUp(inputedText,"allInfo")
+        shortLookUp(inputedText,"allInfo",lowerKeysAI)
+
+def shortLookUp(inputedText,accountFactor,lowerKeysAI):
+    if inputedText in lowerKeysAI:
+        if accountFactor != "allInfo":
+            try:
+                copy(lowerKeysAI[inputedText][accountFactor])
+                return lowerKeysAI[inputedText][accountFactor]
+            except:
+                print(accountFactor," info not added")
+        elif accountFactor == "allInfo":
+            pprint(lowerKeysAI[inputedText])
+    else:
+        for each in lowerKeysAI.keys():
+            if inputedText in each:
+                print("Let me try to guess")
+                correctAccountQuestion = input(each+" ? y/n : ")
+                if correctAccountQuestion == "y":
+                    correctAccount = each
+                    if accountFactor != "allInfo":
+                        print(lowerKeysAI[correctAccount]['Pass'])
+                        copy(lowerKeysAI[correctAccount][accountFactor])
+                        return lowerKeysAI[correctAccount][accountFactor]
+                    elif accountFactor == "allInfo":
+                        pprint (lowerKeysAI[correctAccount])
+                        break
+                elif correctAccountQuestion == "n":
+                    pass
+#accountloading functions:
+def OldAccountDataRequest():
+    dateInput = input("select dates (20180521) or (D)isplay dates : ")
+    if dateInput == "D":
+        for each in glob.glob(makeRelativePath("AccountDataPickles/*.pickle")):
+            print(os.path.basename(each[:-18]))
+        OldAccountDataRequest()
+    else:
+        try:
+            oldAccountData = loadOldAccountData(dateInput)
+            pprint(oldAccountData)
+        except:
+            print("Error of some kind, returning to main menu")
+            runLookup(AI)
+
+def loadOldAccountData(date):
+    fileRead = open(makeRelativePath('AccountDataPickles/{}accountData.pickle'.format(date)), 'rb')
+    accountData = pickle.load(fileRead)
+    return accountData
+
+
 
 def Main():
     global unlockKey

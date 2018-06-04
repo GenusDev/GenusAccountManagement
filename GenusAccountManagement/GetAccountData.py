@@ -5,7 +5,7 @@ import time
 import json
 import datetime
 import pickle
-from generalFunctions import makeRelativePath
+from generalFunctions import makeRelativePath, copy
 
 def RDataPull(BankInfo):
     from Robinhood import Robinhood
@@ -219,28 +219,28 @@ def removeText(accountData):
 
 def compileAllData(AllAccountInfo):
     accountData = {}
-    # accountData['Citi'] = CitiAccountGrab(AllAccountInfo["Citi"])
-    # accountData['PayPal'] = AccountGrab(AllAccountInfo["PayPal"])
-    # accountData['TDClub'] = AccountGrab(AllAccountInfo["TDClub"])
+    accountData['Citi'] = CitiAccountGrab(AllAccountInfo["Citi"])
+    accountData['PayPal'] = AccountGrab(AllAccountInfo["PayPal"])
+    accountData['TDClub'] = AccountGrab(AllAccountInfo["TDClub"])
     accountData['TDMattIRA'] = AccountGrab(AllAccountInfo["TDMattIRA"])
-    # accountData['TDJohnIRA'] = AllAccountInfo["TDJohnIRA"]
-    # accountData['Venmo'] = AccountGrab(AllAccountInfo["Venmo"])
-    # accountData['BECU'] = AccountGrab(AllAccountInfo["BECU"])
-    # accountData['BFSFCU'] = AccountGrab(AllAccountInfo["BFSFCU"])
-    # accountData['Robinhood'] = RDataPull(AllAccountInfo["Robinhood"])
-    # accountData['Rick'] = AllAccountInfo["Rick"]
-    # accountData['Jacob'] = AllAccountInfo["Jacob"]
-    # accountData['Consolidatedloan'] = AllAccountInfo["Consolidatedloan"]
-    # accountData['NewGradPlusLoan'] = AllAccountInfo["NewGradPlusLoan"]
-    # accountData['House'] = AllAccountInfo["House"]
-    print(accountData)
-    # date = datetime.date.today().strftime('%Y%m%d')
-    # path = makeRelativePath('AccountDataPickles/{date}accountData.pickle'.format(date=date))
-    # print(path)
-    # fileWrite = open(path, 'wb')
-    # pickle.dump(accountData, fileWrite)
-    # fileWrite.close()
+    accountData['TDJohnIRA'] = AllAccountInfo["TDJohnIRA"]
+    accountData['Venmo'] = AccountGrab(AllAccountInfo["Venmo"])
+    accountData['BECU'] = AccountGrab(AllAccountInfo["BECU"])
+    accountData['BFSFCU'] = AccountGrab(AllAccountInfo["BFSFCU"])
+    accountData['Robinhood'] = RDataPull(AllAccountInfo["Robinhood"])
+    accountData['Rick'] = AllAccountInfo["Rick"]
+    accountData['Jacob'] = AllAccountInfo["Jacob"]
+    accountData['Consolidatedloan'] = AllAccountInfo["Consolidatedloan"]
+    accountData['NewGradPlusLoan'] = AllAccountInfo["NewGradPlusLoan"]
+    accountData['House'] = AllAccountInfo["House"]
 
-    #accountData = removeText(accountData)
+    date = datetime.date.today().strftime('%Y%m%d')
+    path = makeRelativePath('AccountDataPickles/{date}accountData.pickle'.format(date=date))
+
+    fileWrite = open(path, 'wb')
+    pickle.dump(accountData, fileWrite)
+    fileWrite.close()
+
+    accountData = removeText(accountData)
 
     return accountData

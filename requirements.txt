@@ -13,3 +13,5 @@ pycrypto==2.6.1
 Robinhood==1.0.1
 selenium==3.11.0
 setuptools==28.8.0
+
+coinbase

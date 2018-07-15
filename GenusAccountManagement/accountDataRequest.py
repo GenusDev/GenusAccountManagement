@@ -2,15 +2,18 @@
 import os
 from selenium import webdriver
 from cryptoScripts import decryptFileasJson, encryptJson
+import loadAccountDataFiles
 import ast
 import sys
-import UpdateHoldingCo
+import UpdatePositions
 import GetAccountData
-import pickle
-import glob
-from pprint import pprint
 from generalFunctions import makeRelativePath, copy
+from AccountStructurePrograms.StructureAccounts import StructureAccounts
+
+
+from pprint import pprint
 from commandOptions import commands
+
 
 def runLookup(AI, command="none"):
     lowerKeysAI =  {k.lower(): v for k, v in AI.items()}
@@ -89,15 +92,22 @@ def runLookup(AI, command="none"):
 
 
     if "updateacc" in inputedText:
-        accountData = GetAccountData.compileAllData(AI)
-        #accountData = loadOldAccountData("20180603")
-        pprint(accountData)
-        updateClass = UpdateHoldingCo.updateAccounts(accountData)
-        updateClass.execute()
+        sheetInfo = loadAccountDataFiles.loadAccountSheetInfo(whichAccountArchive)
+        AccountName = sheetInfo["account"]
+        accountData = GetAccountData.compileAllData(AI,AccountName)
+        # accountData = loadAccountDataFiles.loadOldAccountData("20180714MSteele")
+        # pprint(accountData)
+
+        StructuredData = StructureAccounts(sheetInfo,accountData)
+        # pprint(StructuredData)
+
+        updatedAccounts = UpdatePositions.updateAccounts(sheetInfo,StructuredData)
+        updatedAccounts.updateSheets()
+
 
     #loadOldAccountData
-    if "loadaccountdata" in inputedText: #potentiall ancrypt old data
-        OldAccountDataRequest()
+    if "loadaccountdata" in inputedText: #potentially encrypt old data
+        loadAccountDataFiles.OldAccountDataRequest()
 
 
     if "+" in inputedText: #reformat this as a recursive function for allowing short lookups
@@ -154,50 +164,68 @@ def shortLookUp(inputedText,accountFactor,lowerKeysAI):
                         break
                 elif correctAccountQuestion == "n":
                     pass
-#accountloading functions:
-def OldAccountDataRequest():
-    dateInput = input("select dates (20180521) or (D)isplay dates : ")
-    if dateInput == "D":
-        for each in glob.glob(makeRelativePath("AccountDataPickles/*.pickle")):
-            print(os.path.basename(each[:-18]))
-        OldAccountDataRequest()
-    else:
-        try:
-            oldAccountData = loadOldAccountData(dateInput)
-            pprint(oldAccountData)
-        except:
-            print("Error of some kind, returning to main menu")
-            runLookup(AI)
-
-def loadOldAccountData(date):
-    fileRead = open(makeRelativePath('AccountDataPickles/{}accountData.pickle'.format(date)), 'rb')
-    accountData = pickle.load(fileRead)
-    return accountData
-
 
 
 def Main():
-    global unlockKey
-    try:
-        type(sys.argv[1]) == "<class 'str'>"
-    except:
-        unlockKey = input("Account Key?").replace(" ","")
-    else:
-        unlockKey = sys.argv[1]
 
-    try:
-        AI = decryptFileasJson(unlockKey,"(encrypted)AccountData.json")
-    except:
-        tryAgain = input("nope - you are likely less wrong than you are sloppy - Try the code again? (y/n)")
-        if 'y' in tryAgain:
-            Main()
-        if 'n' in tryAgain:
-            print("Okay, bye Felicia")
-    else:
+    def higherLogic():
+        accountDataFileName = IdentifyArchive()
+        print(accountDataFileName)
+        unlockKey = checkForKey()
+
+        decryptFile(accountDataFileName, unlockKey)
+
+
+    def IdentifyArchive():
+        listOfArchives = loadAccountDataFiles.loadAccountDataFiles()
+        #if key in dict - test first before implementing
+        global whichAccountArchive
         try:
-            runLookup(AI,sys.argv[2])
+            whichAccountArchive = sys.argv[1]
         except:
-            runLookup(AI)
+            pprint(listOfArchives)
+            whichAccountArchive = input("Which archive?").replace(" ","")
+
+        if whichAccountArchive in listOfArchives.keys():
+            accountDataFileName = listOfArchives[whichAccountArchive]
+        else:
+            print("not in the list")
+            IdentifyArchive()
+
+        return accountDataFileName
+
+
+    def checkForKey():
+        global unlockKey
+        try:
+            unlockKey = sys.argv[2]
+            type(unlockKey) == "<class 'str'>"
+        except:
+            unlockKey = input("Account Archive Key?").replace(" ","")
+
+        return unlockKey
+
+    def decryptFile(accountDataFileName,unlockKey):
+
+        try:
+            AI = decryptFileasJson(unlockKey,accountDataFileName)
+        except:
+            tryAgain = input("nope - you are likely less wrong than you are sloppy - Try the code again? (y/n)")
+            if 'y' in tryAgain:
+                unlockKey = input("Account Archive Key?").replace(" ","")
+                Main()
+            if 'n' in tryAgain:
+                print("Okay, bye Felicia")
+        else:
+            try:
+                runLookup(AI,sys.argv[3])
+            except:
+                runLookup(AI)
+
+
+    higherLogic()
+
+
 
 if __name__ == '__main__':
     Main()

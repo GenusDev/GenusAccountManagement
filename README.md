@@ -52,6 +52,15 @@ Then place the downloaded Chrome Webdriver into the bin folder.
 
 You can look up p*ssw*rds by calling the command with with keycode and the account of interest.
 ```console
-GAI code accountName
+AI code accountName
 ```
 doing so will copy the password directly
+
+
+
+### TODO:
+- automate account updates on a daily basis
+- integrate coinbase lookups directly
+- create functionality in main interface for adding new accounts
+  - setting up account structure and initializing the creation of a encrypted store
+  - automating permissions or the step by step process of associating a gdoc with the right email.

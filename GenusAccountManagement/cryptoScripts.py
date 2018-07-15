@@ -3,7 +3,10 @@ from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 import json
 import ast
+import sys
+
 from generalFunctions import makeRelativePath
+
 
 chunkSize = 64*1024
 
@@ -17,12 +20,12 @@ def pad(s): #AES only takes blocks of 16 bits
 
 def encryptFile(key, inFileName):
     localKey = getKey(key)
-    cipher = AES.new(localKey)
+    cipher = AES.new(localKey,1)
 
     outputFile = inFileName.replace("decrypted", "encrypted")
 
-    outputFileFullPath = makeRelativePath(outputFile)
-    inFileFullPath = makeRelativePath(inFileName)
+    outputFileFullPath = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=outputFile))
+    inFileFullPath = makeRelativePath("AccountDataEncryption/"+inFileName)
 
     #fileSize = str(os.path.getsize(inFileFullPath)).zfill(16) # make sure there are 16 digits - as this will be printed
 
@@ -42,10 +45,10 @@ def encryptFile(key, inFileName):
 
 def encryptJson(key, AccountDataDict, OutFileName): # needs fixing
     localKey = getKey(key)
-    cipher = AES.new(localKey)
+    cipher = AES.new(localKey,1)
     jsonString = json.dumps(AccountDataDict)
 
-    outputFileName = makeRelativePath(OutFileName)
+    outputFileName = makeRelativePath("AccountDataEncryption/"+OutFileName)
     jsonBites = str(jsonString).encode()
 
     with open(outputFileName, "wb") as outFile:
@@ -66,10 +69,12 @@ def decryptText(ciphertext):
     return dec[:len(dec)-l]
 
 def decryptFileasJson(key, fileName):
+    print(key)
     localKey = getKey(key)
-    cipher = AES.new(localKey)
+    cipher = AES.new(localKey,1)
 
-    InFilePath = makeRelativePath(fileName)
+    InFilePath = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=fileName))
+    print(InFilePath)
 
     with open(InFilePath, 'rb') as inFile:
         chunk = inFile.read(chunkSize)    #won't work for data larger than chunksize - check with
@@ -84,8 +89,8 @@ def decryptFile(key, fileName):
 
     outputFile = fileName.replace("encrypted", "decrypted")
 
-    outputFile = makeRelativePath(outputFile)
-    fileName = makeRelativePath(fileName)
+    outputFile = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=outputFile))
+    fileName = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=fileName))
 
     with open(fileName, 'rb') as inFile:
         # fileSize = int(inFile.read(16))

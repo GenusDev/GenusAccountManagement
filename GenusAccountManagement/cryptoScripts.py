@@ -4,6 +4,8 @@ from Crypto.Hash import SHA256
 import json
 import ast
 import sys
+import loadAccountDataFiles
+from pprint import pprint
 
 from generalFunctions import makeRelativePath
 
@@ -85,7 +87,7 @@ def decryptFileasJson(key, fileName):
 
 def decryptFile(key, fileName):
     localKey = getKey(key)
-    cipher = AES.new(localKey)
+    cipher = AES.new(localKey,1)
 
     outputFile = fileName.replace("encrypted", "decrypted")
 
@@ -109,14 +111,27 @@ def decryptFile(key, fileName):
 def Main():
     choice =  input("Would you like to (E)ncrypt? or (D)ecrypt : ")
 
-    if choice == 'E':
-        fileName = input("File to encrypt? :")
+    if choice == 'D':
+        options = loadAccountDataFiles.loadAccountDataFiles()
+        for eachOption in options:
+            options[eachOption] = options[eachOption].replace("encrypted","decrypted")
+        pprint(options)
+        fileName =  input("File to decrypt? :")
+        if len(fileName)<2:
+            fileName = options[fileName]
+
         code = input("code? :")
         encryptFile(code,fileName)
         print("done")
-    if choice == 'D':
-        fileName =  input("File to decrypt? :")
+    if choice == 'E':
+        options = loadAccountDataFiles.loadAccountDataFiles()
+        pprint(options)
+        fileName =  input("File to Encrypt? :")
+        if len(fileName)<2:
+            fileName = options[fileName]
+
         code = input("code? :")
+
         decryptFile(code,fileName)
         print("done")
     else:

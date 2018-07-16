@@ -7,7 +7,7 @@ import ast
 import sys
 import UpdatePositions
 import GetAccountData
-from generalFunctions import makeRelativePath, copy
+from generalFunctions import makeRelativePath, copy, gitPush
 from AccountStructurePrograms.StructureAccounts import StructureAccounts
 
 
@@ -56,6 +56,8 @@ def runLookup(AI, command="none"):
                 AI[AccountName] = {keyInputed:valueInputed}
 
         pprint(AI[AccountName])
+
+
 
         encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
         runLookup(AI)
@@ -169,11 +171,12 @@ def shortLookUp(inputedText,accountFactor,lowerKeysAI):
 def Main():
 
     def higherLogic():
-        accountDataFileName = IdentifyArchive()
-        print(accountDataFileName)
-        unlockKey = checkForKey()
-
-        decryptFile(accountDataFileName, unlockKey)
+        gitPush()
+        # accountDataFileName = IdentifyArchive()
+        # print(accountDataFileName)
+        # unlockKey = checkForKey()
+        #
+        # decryptFile(accountDataFileName, unlockKey)
 
 
     def IdentifyArchive():

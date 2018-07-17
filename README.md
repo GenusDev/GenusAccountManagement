@@ -23,7 +23,7 @@ Copy PWD as DirVar
 pwd | tr -d '\n' | pbcopy
 DirVar=`pwd`
 locOfScript=''"$DirVar"'/programFiles/accountDataRequest.py'
-echo 'alias GAI="python3 '"'"''"$locOfScript"''"'"'"'  >>~/.bash_profile
+echo 'alias AI="python3 '"'"''"$locOfScript"''"'"'"'  >>~/.bash_profile
 ```
 Script to edit bash profile to assign the python scripts
 

@@ -7,7 +7,7 @@ import ast
 import sys
 import UpdatePositions
 import GetAccountData
-from generalFunctions import makeRelativePath, copy, gitPush
+from generalFunctions import makeRelativePath, copy, gitPush, gitPull
 from AccountStructurePrograms.StructureAccounts import StructureAccounts
 
 
@@ -172,7 +172,7 @@ def shortLookUp(inputedText,accountFactor,lowerKeysAI):
 def Main():
 
     def higherLogic():
-        # gitPush()
+        gitPull()
         accountDataFileName = IdentifyArchive()
         print(accountDataFileName)
         unlockKey = checkForKey()

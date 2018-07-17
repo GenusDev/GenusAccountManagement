@@ -60,6 +60,7 @@ def runLookup(AI, command="none"):
 
 
         encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
+        gitPush()
         runLookup(AI)
 
     elif "del" in inputedText:

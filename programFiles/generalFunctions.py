@@ -38,7 +38,7 @@ def gitPush():
     repo.git.status()
     repo.git.push()
 
-gitPush()
+# gitPush()
 
 
     #subprocess.call(["cd",script_dir])

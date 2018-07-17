@@ -171,12 +171,12 @@ def shortLookUp(inputedText,accountFactor,lowerKeysAI):
 def Main():
 
     def higherLogic():
-        gitPush()
-        # accountDataFileName = IdentifyArchive()
-        # print(accountDataFileName)
-        # unlockKey = checkForKey()
-        #
-        # decryptFile(accountDataFileName, unlockKey)
+        # gitPush()
+        accountDataFileName = IdentifyArchive()
+        print(accountDataFileName)
+        unlockKey = checkForKey()
+
+        decryptFile(accountDataFileName, unlockKey)
 
 
     def IdentifyArchive():

@@ -1,6 +1,7 @@
 import gspread
 import datetime
 import oauth2client
+from cryptoScripts import decryptFileasJson
 from locale import *
 from generalFunctions import makeRelativePath
 
@@ -13,6 +14,8 @@ class updateAccounts:
     def __init__(self, sheetInfo="noneProvided", StructuredData="noneInputted"):
         setlocale(LC_NUMERIC, '')
 
+        self.credsUnlockKey = input("Creds Unlock Key?")
+
         self.client = self.getAuth()
         self.sheetInfo = sheetInfo
         self.StructuredData = StructuredData
@@ -24,14 +27,18 @@ class updateAccounts:
         # self.ShareTrackingSheet = client.open_by_key('1Qjl_H4Mf7ChN0UqricRmArzdjIiXQ6fnTIq_OZqKrbU').worksheet('ShareTracking')
         # self.PersonalAccountSheet = client.open_by_key('10o-H7l5u0BvazIs4g3Fy4NpJcb8d4X6n7vFBVs0pKCc').worksheet('Statements')
 
+
     def getAuth(self):
+
+        credJson = decryptFileasJson(self.credsUnlockKey,'(encrypted)GoogleSheetsClientCreds.json')
 
         from oauth2client.service_account import ServiceAccountCredentials
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_name(makeRelativePath('GoogleSheetsClientCreds.json'), scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(credJson, scope)
         client = gspread.authorize(creds)
         return client
+
 
     def updateSheets(self):
         spreadsheetId = self.sheetInfo["spreadsheetId"]

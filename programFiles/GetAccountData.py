@@ -14,6 +14,7 @@ def compileAllData(AllAccountInfo, AccountName):
                 # if "Owner" in AllAccountInfo[eachAccount].keys():
                 #     owner = AllAccountInfo[eachAccount]["Owner"]
                 accountData[eachAccount] = updateBasedOnProgram(eachAccount,AllAccountInfo[eachAccount])
+                print(accountData[eachAccount])
 
         logDataToPickle(accountData,AccountName)
 

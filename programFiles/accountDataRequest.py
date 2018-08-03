@@ -59,7 +59,7 @@ def runLookup(AI, command="none"):
 
 
 
-        encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
+        encryptJson(unlockKey,AI,accountDataFileName)
         gitPush()
         runLookup(AI)
 
@@ -90,7 +90,7 @@ def runLookup(AI, command="none"):
         else:
             print("not an option")
 
-        encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
+        encryptJson(unlockKey,AI, accountDataFileName)
         gitPush()
         runLookup(AI)
 
@@ -174,6 +174,7 @@ def Main():
 
     def higherLogic():
         gitPull()
+        global accountDataFileName
         accountDataFileName = IdentifyArchive()
         print(accountDataFileName)
         unlockKey = checkForKey()

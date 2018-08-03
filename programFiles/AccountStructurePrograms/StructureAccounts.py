@@ -1,5 +1,5 @@
 
-def StructureAccounts(sheetInfo,AllAccountData):
+def StructureAccounts(sheetInfo, AllAccountData):
     print("printing all account Data")
     print(AllAccountData)
     print(type(AllAccountData))
@@ -26,7 +26,7 @@ def StructureAccounts(sheetInfo,AllAccountData):
 
         return dataOrganized
 
-    def addUpByType(type,AccountSpecficData):
+    def addUpByType(type, AccountSpecficData):
         totalByType = 0
 
         for eachEntryKey in AccountSpecficData:

@@ -19,23 +19,33 @@ def AccountGrab(BankInfo):
         try:
             logIn(driver,BankInfo)
             time.sleep(1)
-            data = getData(driver,BankInfo)
+            data = getData(driver, BankInfo)
         except:
             tryLoginDirectly(driver)
-            data = getData(driver,BankInfo)
 
-        return data
 
     def tryLoginDirectly(driver):
         print("logIn Failed, try logging in directly and wait for data scraper to execute in 15 secs")
-        time.sleep(20)
-        if "ChallengeHomeKeyWord" in BankInfo.keys():
-            if BankInfo["ChallengeHomeKeyWord"] not in driver.current_url:
-                tryLoginDirectly(driver)
+        request = input("Would you like to ( i )put the balance directly?, ( p )ass, or ( r )etry scrapper?  ")
+        if "i" in request:
+
+            dataKey = input("What's the balance type? (cash, invested, credit?)")
+            amount = input("amount?")
+
+            AccountSpecificData[dataKey] = amount
+
+        elif "p" in request:
+            pass
+
+        elif "r" in request:
+            if "ChallengeHomeKeyWord" in BankInfo.keys():
+                if BankInfo["ChallengeHomeKeyWord"] not in driver.current_url:
+                    tryLoginDirectly(driver)
+                    getData(driver, BankInfo)
+                else:
+                    pass
             else:
                 pass
-        else:
-            pass
 
     def logIn(driver,BankInfo):
         driver.get(BankInfo["LogInURL"])

@@ -1,5 +1,4 @@
 import os
-import subprocess
 import datetime
 import git
 
@@ -14,28 +13,23 @@ def copy(data):
     os.system("echo '%s' | pbcopy" % data)
 
 
+def gitPull():
+    script_dir = os.path.dirname(__file__)
+    script_dir = script_dir.replace("/programFiles","")
+
+    repo = git.Repo(script_dir)
+    repo.git.pull()
+
 def gitPush():
     date = datetime.date.today().strftime('%Y%m%d')
     script_dir = os.path.dirname(__file__)
     script_dir = script_dir.replace("/programFiles","")
     print(script_dir)
     commitDescrip = "update of accounts {}".format(date)
-    # subprocess.call(["pwd"])
-    # subprocess.call(["cd",script_dir])
-    # subprocess.call(["pwd"])
-    # subprocess.call(["git","add","."])
-    # subprocess.call(["git","commit","-m",commitDescrip])
-    # subprocess.call(["git","push","origin","master"])
-    #
 
     repo = git.Repo(script_dir)
-    print (repo.git.status())
-    # checkout and track a remote branch
     repo.git.add(u=True)
-    # commit
     repo.git.commit( m=commitDescrip )
-    # now we are one commit ahead
-    repo.git.status()
     repo.git.push()
 
 # gitPush()

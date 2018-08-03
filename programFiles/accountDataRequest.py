@@ -91,6 +91,7 @@ def runLookup(AI, command="none"):
             print("not an option")
 
         encryptJson(unlockKey,AI,"(encrypted)AccountData.json")
+        gitPush()
         runLookup(AI)
 
 

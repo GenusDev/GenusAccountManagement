@@ -176,7 +176,6 @@ def Main():
         gitPull()
         global accountDataFileName
         accountDataFileName = IdentifyArchive()
-        print(accountDataFileName)
         unlockKey = checkForKey()
 
         decryptFile(accountDataFileName, unlockKey)

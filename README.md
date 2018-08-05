@@ -3,6 +3,8 @@ Scripts for automating account management for Genus Development Partners
 
 Optimized for a Mac OS
 
+You'll have to set up a github and be invited as a collaborator to the github repository
+
 ## Dependencies
 
 These scripts use Python3 - so first make sure you have a current version of Python3 before installing

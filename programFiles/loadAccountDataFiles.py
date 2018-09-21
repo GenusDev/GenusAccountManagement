@@ -9,7 +9,8 @@ def loadAccountDataFiles():
     AccountDataFiles = {
             "M" : "(encrypted)AccountDataMSteele.json",
             "E" : "(encrypted)AccountDataEndogen.json",
-            "G" : "(encrypted)AccountDataGenus.json"
+            "G" : "(encrypted)AccountDataGenus.json",
+            "O" : "other"
     }
     return AccountDataFiles
 

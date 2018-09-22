@@ -1,9 +1,10 @@
 import glob
 import os
 import pickle
-from AccountStructurePrograms.MSteeleAccountStructure import loadPersonalAccounts #come up with a more modular approach later
+from AccountStructurePrograms.MSteeleAccountStructure import loadPersonalAccounts  #come up with a more modular approach later
 from AccountStructurePrograms.EndogenAccountStructure import loadEndogenAccounts
-from generalFunctions import makeRelativePath, copy
+from generalFunctions import makeRelativePath
+from pprint import pprint
 
 def loadAccountDataFiles():
     AccountDataFiles = {
@@ -29,19 +30,21 @@ def loadAccountSheetInfo(whichArchive):
     }[whichArchive]
 
 #accountloading functions:
-def OldAccountDataRequest():
-    dateInput = input("select dates and Name (20180521Name) or (D)isplay dates : ")
-    if dateInput == "D":
-        for each in glob.glob(makeRelativePath("AccountDataPickles/*.pickle")):
-            print(os.path.basename(each[:-18]))
-        OldAccountDataRequest()
+def OldAccountDataRequest(dateInput="null"):
+    print(dateInput)
+    if dateInput == "null":
+        dateInput = input("select dates and Name (20180521Name) or (D)isplay dates : ")
+        if dateInput == "D":
+            for each in glob.glob(makeRelativePath("AccountDataPickles/*.pickle")):
+                print(os.path.basename(each[:-18]))
+        OldAccountDataRequest(dateInput)
     else:
         try:
             oldAccountData = loadOldAccountData(dateInput)
             pprint(oldAccountData)
+            return oldAccountData
         except:
-            print("Error of some kind, returning to main menu")
-            runLookup(AI)
+            OldAccountDataRequest()
 
 def loadOldAccountData(date):
     fileRead = open(makeRelativePath('AccountDataPickles/{}accountData.pickle'.format(date)), 'rb')

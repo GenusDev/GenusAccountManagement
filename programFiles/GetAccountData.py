@@ -14,6 +14,7 @@ def compileAllData(AllAccountInfo, AccountName):
                 # if "Owner" in AllAccountInfo[eachAccount].keys():
                 #     owner = AllAccountInfo[eachAccount]["Owner"]
                 accountData[eachAccount] = updateBasedOnProgram(eachAccount,AllAccountInfo[eachAccount])
+                print("printing Final Output")
                 print(accountData[eachAccount])
 
         logDataToPickle(accountData,AccountName)
@@ -21,16 +22,28 @@ def compileAllData(AllAccountInfo, AccountName):
         accountDataWithOutText = pullBankAccountInfoPrograms.removeText(accountData)
         return accountDataWithOutText
 
-    def updateBasedOnProgram(accountName,eachAccountDataInfo):
+    def updateBasedOnProgram(accountName, eachAccountDataInfo):
 
         updateSignal = eachAccountDataInfo["Update"]
 
         if updateSignal == "normally":
             return pullBankAccountInfoPrograms.AccountGrab(eachAccountDataInfo)
         elif updateSignal == 'inputInfo':
-            return eachAccountDataInfo
+            return inputDirectly()
         elif updateSignal == 'special':
-            return findRelevantAccountGrab(accountName, eachAccountDataInfo)
+            try:
+                return findRelevantAccountGrab(accountName, eachAccountDataInfo)
+            except:
+                return inputDirectly()
+
+    def inputDirectly():
+        cash = input("cash?")
+        invested = input("invested?")
+        Data = {
+            "cash": cash,
+            "invested": invested
+        }
+        return Data
 
 
     def findRelevantAccountGrab(accountName, eachAccountDataInfo):

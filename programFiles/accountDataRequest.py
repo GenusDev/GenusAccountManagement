@@ -135,7 +135,8 @@ def runLookup(AI, command="none"):
             #     driver.get(url)
 
     elif inputedText in lowerKeysAI:
-        print("going straight to copy")
+        print("printing All Info, and copying Password")
+        shortLookUp(inputedText,"allInfo",lowerKeysAI)
         copy(lowerKeysAI[inputedText]["Pass"])
 
 
@@ -173,7 +174,10 @@ def shortLookUp(inputedText,accountFactor,lowerKeysAI):
 def Main():
 
     def higherLogic():
-        gitPull()
+        try:
+            gitPull()
+        except:
+            pass
         global accountDataFileName
         accountDataFileName = IdentifyArchive()
         unlockKey = checkForKey()

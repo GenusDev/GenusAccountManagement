@@ -2,6 +2,7 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from generalFunctions import makeRelativePath, copy
+import GetAccountData
 import time
 import json
 import datetime
@@ -16,36 +17,32 @@ def AccountGrab(BankInfo):
 #       options.add_argument('headless')
         driver = webdriver.Chrome(chrome_options=options)
 
-        try:
-            logIn(driver,BankInfo)
-            time.sleep(1)
-            data = getData(driver, BankInfo)
-        except:
-            tryLoginDirectly(driver)
+
+        logIn(driver,BankInfo)
+        time.sleep(1)
+        data = getData(driver, BankInfo)
 
 
-    def tryLoginDirectly(driver):
-        print("logIn Failed, try logging in directly and wait for data scraper to execute in 15 secs")
-        request = input("Would you like to ( i )put the balance directly?, ( p )ass, or ( r )etry scrapper?  ")
-        if "i" in request:
-
-            dataKey = input("What's the balance type? (cash, invested, credit?)")
-            amount = input("amount?")
-
-            AccountSpecificData[dataKey] = amount
-
-        elif "p" in request:
-            pass
-
-        elif "r" in request:
-            if "ChallengeHomeKeyWord" in BankInfo.keys():
-                if BankInfo["ChallengeHomeKeyWord"] not in driver.current_url:
-                    tryLoginDirectly(driver)
-                    getData(driver, BankInfo)
-                else:
-                    pass
-            else:
-                pass
+    # def tryLoginDirectly(driver):
+    #     print("logIn Failed, try logging in directly and wait for data scraper to execute in 15 secs")
+    #     request = input("Would you like to ( i )put the balance directly?, ( p )ass, or ( r )etry scrapper?  ")
+    #     if "i" in request:
+    #
+    #         GetAccountData.
+    #
+    #
+    #     elif "p" in request:
+    #         pass
+    #
+    #     elif "r" in request:
+    #         if "ChallengeHomeKeyWord" in BankInfo.keys():
+    #             if BankInfo["ChallengeHomeKeyWord"] not in driver.current_url:
+    #                 tryLoginDirectly(driver)
+    #                 getData(driver, BankInfo)
+    #             else:
+    #                 pass
+    #         else:
+    #             pass
 
     def logIn(driver,BankInfo):
         driver.get(BankInfo["LogInURL"])

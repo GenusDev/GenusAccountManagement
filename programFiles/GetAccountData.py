@@ -23,20 +23,25 @@ def compileAllData(AllAccountInfo, AccountName):
         return accountDataWithOutText
 
     def updateBasedOnProgram(accountName, eachAccountDataInfo):
-
+        print(accountName)
         updateSignal = eachAccountDataInfo["Update"]
 
         if updateSignal == "normally":
-            return pullBankAccountInfoPrograms.AccountGrab(eachAccountDataInfo)
+            try:
+                return pullBankAccountInfoPrograms.AccountGrab(eachAccountDataInfo)
+            except:
+                return inputDirectly(accountName)
+
         elif updateSignal == 'inputInfo':
-            return inputDirectly()
+            return inputDirectly(accountName)
         elif updateSignal == 'special':
             try:
                 return findRelevantAccountGrab(accountName, eachAccountDataInfo)
             except:
-                return inputDirectly()
+                return inputDirectly(accountName)
 
-    def inputDirectly():
+    def inputDirectly(accountName):
+        print(accountName)
         cash = input("cash?")
         invested = input("invested?")
         Data = {

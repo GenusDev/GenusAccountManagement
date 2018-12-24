@@ -32,9 +32,6 @@ def gitPush():
     repo.git.commit( m=commitDescrip )
     repo.git.push()
 
-gitPull()
-gitPush()
-
 
     #subprocess.call(["cd",script_dir])
     # subprocess.check_call([orient])

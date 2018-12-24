@@ -1,4 +1,4 @@
-#
+
 def loadPersonalAccounts():
 
     sheetInfo = {

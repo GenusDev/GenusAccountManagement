@@ -2,17 +2,17 @@
 import os
 from selenium import webdriver
 from cryptoScripts import decryptFileasJson, encryptJson
-import loadAccountDataFiles
+from AccountStructurePrograms import loadAccountDataFiles
 import ast
 import sys
-import UpdatePositions
-import GetAccountData
+from AccountScraping import UpdatePositions
+from AccountScraping import GetAccountData
 from generalFunctions import makeRelativePath, copy, gitPush, gitPull
 from AccountStructurePrograms.StructureAccounts import StructureAccounts
 
 
 from pprint import pprint
-from commandOptions import commands
+from AccountStructurePrograms.commandOptions import commands
 
 
 def runLookup(AI, command="none"):
@@ -137,7 +137,8 @@ def runLookup(AI, command="none"):
     elif inputedText in lowerKeysAI:
         print("printing All Info, and copying Password")
         shortLookUp(inputedText,"allInfo",lowerKeysAI)
-        copy(lowerKeysAI[inputedText]["Pass"])
+        if "Pass" in lowerKeysAI[inputedText]:
+            copy(lowerKeysAI[inputedText]["Pass"])
 
 
     elif inputedText not in lowerKeysAI:

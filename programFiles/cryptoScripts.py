@@ -1,7 +1,7 @@
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 import json
-import loadAccountDataFiles
+from AccountStructurePrograms import loadAccountDataFiles
 from pprint import pprint
 from generalFunctions import makeRelativePath
 

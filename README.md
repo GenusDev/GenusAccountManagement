@@ -12,6 +12,8 @@ These scripts use Python3 - so first make sure you have a current version of Pyt
 ### command for installing dependencies
 
 ```console
+cd programFiles
+source env/bin/activate
 pip install -r requirements.txt
 ```
 You may need to install the Robinhood library directly from this link: [github](https://github.com/Jamonek/Robinhood)

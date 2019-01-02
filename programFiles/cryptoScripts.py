@@ -72,12 +72,11 @@ def decryptText(ciphertext):
 
 
 def decryptFileasJson(key, fileName):
-    print(key)
+
     localKey = getKey(key)
     cipher = AES.new(localKey,1)
 
     InFilePath = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=fileName))
-    print(InFilePath)
 
     with open(InFilePath, 'rb') as inFile:
         chunk = inFile.read(chunkSize)    #won't work for data larger than chunksize - check with

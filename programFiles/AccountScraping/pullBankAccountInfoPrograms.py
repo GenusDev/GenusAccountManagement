@@ -12,6 +12,7 @@ def AccountGrab(BankInfo):
     AccountSpecificData = {}
 
     def execute(BankInfo):
+        print(BankInfo)
         options = webdriver.ChromeOptions()
 #       options.add_argument('headless')
         driver = webdriver.Chrome(chrome_options=options)

@@ -10,13 +10,12 @@ def compileAllData(AllAccountInfo, AccountName):
     def higherLogic(accountData):
 
         for eachAccount in AllAccountInfo:
-            if AccountName == '$tdjohnira':
-                if "Update" in AllAccountInfo[eachAccount].keys():
-                    # if "Owner" in AllAccountInfo[eachAccount].keys():
-                    #     owner = AllAccountInfo[eachAccount]["Owner"]
-                    accountData[eachAccount] = updateBasedOnProgram(eachAccount, AllAccountInfo[eachAccount])
-                    print("printing Final Output")
-                    print(accountData[eachAccount])
+            if "Update" in AllAccountInfo[eachAccount].keys():
+                # if "Owner" in AllAccountInfo[eachAccount].keys():
+                #     owner = AllAccountInfo[eachAccount]["Owner"]
+                accountData[eachAccount] = updateBasedOnProgram(eachAccount, AllAccountInfo[eachAccount])
+                print("printing Final Output")
+                print(accountData[eachAccount])
 
         logDataToPickle(accountData,AccountName)
 

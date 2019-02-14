@@ -93,8 +93,9 @@ def decryptFile(key, fileName):
     outputFile = fileName.replace("encrypted", "decrypted")
 
     outputFile = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=outputFile))
+    print(outputFile)
     fileName = makeRelativePath('AccountDataEncryption/{fileName}'.format(fileName=fileName))
-
+    print(fileName)
     with open(fileName, 'rb') as inFile:
         # fileSize = int(inFile.read(16))
 
@@ -112,7 +113,7 @@ def decryptFile(key, fileName):
 def Main():
     choice = input("Would you like to (E)ncrypt? or (D)ecrypt : ")
 
-    if choice == 'D':
+    if choice == 'E':
         options = loadAccountDataFiles.loadAccountDataFiles()
         for eachOption in options:
             options[eachOption] = options[eachOption].replace("encrypted", "decrypted")
@@ -122,9 +123,10 @@ def Main():
             fileName = options[fileName]
 
         code = input("code? :")
-        decryptFile(code, fileName)
+        encryptFile(code, fileName)
         print("done")
-    if choice == 'E':
+
+    if choice == 'D':
         options = loadAccountDataFiles.loadAccountDataFiles()
         pprint(options)
         fileName = input("File to Encrypt? :")
@@ -133,7 +135,7 @@ def Main():
 
         code = input("code? :")
 
-        encryptFile(code, fileName)
+        decryptFile(code, fileName)
         print("done")
     else:
         print("No option selected, closing")

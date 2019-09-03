@@ -1,4 +1,4 @@
-from GSheetsAuth import GenTrackrGSheets
+ from GSheetsAuth import GenTrackrGSheets
 import datetime
 
 #probably better to pass this object the client rather than have to recreate the instance with every creation

@@ -1,6 +1,6 @@
 
 bs4==0.0.1
-cryptography==2.1.4
+cryptography==2.3
 gspread==3.0.0
 pprint
 

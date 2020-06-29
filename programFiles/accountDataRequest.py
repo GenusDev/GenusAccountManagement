@@ -46,6 +46,7 @@ def runLookup(AI, command="none"):
 
         if "{" in keyInputed:
             try:
+                print('found literal')
                 AI[AccountName].update(ast.literal_eval(keyInputed))
             except:
                 AI[AccountName] = ast.literal_eval(keyInputed)

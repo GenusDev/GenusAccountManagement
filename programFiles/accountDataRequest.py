@@ -45,7 +45,10 @@ def runLookup(AI, command="none"):
         keyInputed = input("key? ('Usr','Pass','Handle','Id'):, add in new dict with {} ")
 
         if "{" in keyInputed:
-            AI[AccountName] = ast.literal_eval(keyInputed)
+            try:
+                AI[AccountName].update(ast.literal_eval(keyInputed))
+            except:
+                AI[AccountName] = ast.literal_eval(keyInputed)
         else:
             valueInputed = input("value?: ")
             try:
@@ -53,7 +56,7 @@ def runLookup(AI, command="none"):
                 pprint(currentData)
                 AI[AccountName].update({keyInputed:valueInputed})
             except:
-                AI[AccountName] = {keyInputed:valueInputed}
+                print('error updating account')
 
         pprint(AI[AccountName])
 
